@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Log Query Optimization System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #e8f0ff, #f5e9ff);
+            color: #222;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid #2563eb;
+        }
+
+        .compiler-card {
+            border-left: 6px solid #7c3aed;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #2563eb;
+        }
+
+        .compiler-card h2 {
+            color: #7c3aed;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            margin: 5px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        .query-input {
+            width: 70%;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 7px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .process-button {
+            background: #7c3aed;
+        }
+
+        .process-button:hover {
+            background: #6d28d9;
+        }
+
+        .add-button {
+            background: #16a34a;
+        }
+
+        .add-button:hover {
+            background: #15803d;
+        }
+
+        .count-button {
+            background: #9333ea;
+        }
+
+        .count-button:hover {
+            background: #7e22ce;
+        }
+
+        .performance-button {
+            background: #ea580c;
+        }
+
+        .performance-button:hover {
+            background: #c2410c;
+        }
+
+        pre {
+            background: #f3f4f6;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            min-height: 50px;
+        }
+
+        .compiler-flow {
+            background: #f5f3ff;
+            border: 1px solid #ddd6fe;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #5b21b6;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>Log Query Optimization System</h1>
+
+        <p>
+            Compiler-based log query processing and optimization system
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+
+        <!-- PROJECT INFORMATION -->
+
+        <div class="info-box">
+
+            <strong>System Overview</strong>
+
+            <p>
+                This system processes custom log queries using
+                Compiler Design concepts such as Lexical Analysis,
+                Syntax Analysis and Query Optimization.
+                The processed query is then used to search log data
+                stored in MySQL.
+            </p>
+
+        </div>
+
+
+        <!-- CUSTOM QUERY -->
+
+        <div class="card compiler-card">
+
+            <h2>Custom Log Query</h2>
+
+            <p>
+                Enter a custom query using the format:
+            </p>
+
+            <p>
+                <strong>
+                    FIND LOGS WHERE level = ERROR
+                </strong>
+            </p>
+
+
+            <div class="compiler-flow">
+
+                Query
+                →
+                Lexical Analysis
+                →
+                Syntax Analysis
+                →
+                Optimization
+                →
+                Log Results
+
+            </div>
+
+
+            <input
+                type="text"
+                id="customQuery"
+                class="query-input"
+                placeholder="FIND LOGS WHERE level = ERROR">
+
+
+            <button
+                class="process-button"
+                onclick="processQuery()">
+
+                Process Query
+
+            </button>
+
+
+            <pre id="queryResult">Query processing result will appear here...</pre>
+
+        </div>
+
+
+        <!-- ADD LOG -->
+
+        <div class="card">
+
+            <h2>Add New Log</h2>
+
+            <input
+                type="text"
+                id="newTimestamp"
+                placeholder="Timestamp">
+
+            <input
+                type="text"
+                id="newLevel"
+                placeholder="Level (ERROR/INFO/WARNING)">
+
+            <input
+                type="text"
+                id="newService"
+                placeholder="Service">
+
+            <input
+                type="text"
+                id="newMessage"
+                placeholder="Message">
+
+            <button
+                class="add-button"
+                onclick="addLog()">
+
+                Add Log
+
+            </button>
+
+            <pre id="addResult">
+New log result will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="card">
+
+            <h2>Search Logs</h2>
+
+            <input
+                type="text"
+                id="keyword"
+                placeholder="Enter keyword">
+
+            <button onclick="searchLogs()">
+
+                Search
+
+            </button>
+
+            <pre id="searchResult">
+Search results will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- ALL LOGS -->
+
+        <div class="card">
+
+            <h2>All Logs</h2>
+
+            <button onclick="getAllLogs()">
+
+                Show All Logs
+
+            </button>
+
+            <pre id="allResult">
+All logs will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- LEVEL -->
+
+        <div class="card">
+
+            <h2>Search by Log Level</h2>
+
+            <select id="level">
+
+                <option value="ERROR">
+                    ERROR
+                </option>
+
+                <option value="INFO">
+                    INFO
+                </option>
+
+                <option value="WARNING">
+                    WARNING
+                </option>
+
+            </select>
+
+            <button onclick="getByLevel()">
+
+                Search
+
+            </button>
+
+            <pre id="levelResult">
+Level results will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- SERVICE -->
+
+        <div class="card">
+
+            <h2>Search by Service</h2>
+
+            <input
+                type="text"
+                id="service"
+                placeholder="Example: PaymentService">
+
+            <button onclick="getByService()">
+
+                Search
+
+            </button>
+
+            <pre id="serviceResult">
+Service results will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- COUNT -->
+
+        <div class="card">
+
+            <h2>Log Count</h2>
+
+            <button
+                class="count-button"
+                onclick="getCounts()">
+
+                Show Log Counts
+
+            </button>
+
+            <pre id="countResult">
+Log counts will appear here...
+            </pre>
+
+        </div>
+
+
+        <!-- PERFORMANCE -->
+
+        <div class="card">
+
+            <h2>Query Performance</h2>
+
+            <button
+                class="performance-button"
+                onclick="getPerformance()">
+
+                Measure Performance
+
+            </button>
+
+            <pre id="performanceResult">
+Performance result will appear here...
+            </pre>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="footer">
+
+        Log Query Optimization System |
+        Spring Boot + MySQL |
+        Compiler Design Project
+
+    </div>
+
+
+
+    <script>
+
+
+        // CUSTOM QUERY PROCESSING
+
+       function processQuery() {
+
+    let query = document.getElementById("customQuery").value;
+
+    if (query.trim() === "") {
+
+        document.getElementById("queryResult").innerText =
+            "Please enter a query.";
+
+        return;
+    }
+
+    document.getElementById("queryResult").innerText =
+        "Processing query...";
+
+    fetch("/logs/process", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: query
+        })
+    })
+
+    .then(function(response) {
+
+        if (!response.ok) {
+            throw new Error("Server error: " + response.status);
+        }
+
+        return response.json();
+    })
+
+    .then(function(data) {
+
+        document.getElementById("queryResult").innerText =
+            JSON.stringify(data, null, 2);
+
+    })
+
+    .catch(function(error) {
+
+        document.getElementById("queryResult").innerText =
+            "Error: " + error.message;
+
+    });
+}
+
+
+        // ADD LOG
+
+        function addLog() {
+
+            let log = {
+
+                timestamp:
+                    document.getElementById(
+                        "newTimestamp"
+                    ).value,
+
+                level:
+                    document.getElementById(
+                        "newLevel"
+                    ).value,
+
+                service:
+                    document.getElementById(
+                        "newService"
+                    ).value,
+
+                message:
+                    document.getElementById(
+                        "newMessage"
+                    ).value
+
+            };
+
+
+            fetch("/logs", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body: JSON.stringify(log)
+
+            })
+
+
+            .then(response =>
+                response.json()
+            )
+
+
+            .then(data => {
+
+                document.getElementById(
+                    "addResult"
+                ).innerText =
+                    "Log added successfully!\n\n" +
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            })
+
+
+            .catch(error => {
+
+                document.getElementById(
+                    "addResult"
+                ).innerText =
+                    "Error while adding log.";
+
+            });
+
+        }
+
+
+
+        // SEARCH LOGS
+
+        function searchLogs() {
+
+            let keyword =
+                document.getElementById(
+                    "keyword"
+                ).value;
+
+
+            if (keyword === "") {
+
+                document.getElementById(
+                    "searchResult"
+                ).innerText =
+                    "Please enter a keyword.";
+
+                return;
+
+            }
+
+
+            fetch(
+                "/logs/search?keyword=" +
+                encodeURIComponent(keyword)
+            )
+
+
+            .then(response =>
+                response.json()
+            )
+
+
+            .then(data => {
+
+                document.getElementById(
+                    "searchResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            })
+
+
+            .catch(error => {
+
+                document.getElementById(
+                    "searchResult"
+                ).innerText =
+                    "Error while searching logs.";
+
+            });
+
+        }
+
+
+
+        // ALL LOGS
+
+        function getAllLogs() {
+
+            fetch("/logs")
+
+            .then(response =>
+                response.json()
+            )
+
+            .then(data => {
+
+                document.getElementById(
+                    "allResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            });
+
+        }
+
+
+
+        // SEARCH BY LEVEL
+
+        function getByLevel() {
+
+            let level =
+                document.getElementById(
+                    "level"
+                ).value;
+
+
+            fetch(
+                "/logs/level?level=" +
+                encodeURIComponent(level)
+            )
+
+
+            .then(response =>
+                response.json()
+            )
+
+
+            .then(data => {
+
+                document.getElementById(
+                    "levelResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            });
+
+        }
+
+
+
+        // SEARCH BY SERVICE
+
+        function getByService() {
+
+            let service =
+                document.getElementById(
+                    "service"
+                ).value;
+
+
+            if (service === "") {
+
+                document.getElementById(
+                    "serviceResult"
+                ).innerText =
+                    "Please enter a service name.";
+
+                return;
+
+            }
+
+
+            fetch(
+                "/logs/service?service=" +
+                encodeURIComponent(service)
+            )
+
+
+            .then(response =>
+                response.json()
+            )
+
+
+            .then(data => {
+
+                document.getElementById(
+                    "serviceResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            });
+
+        }
+
+
+
+        // LOG COUNT
+
+        function getCounts() {
+
+            fetch("/logs/count")
+
+            .then(response =>
+                response.json()
+            )
+
+            .then(data => {
+
+                document.getElementById(
+                    "countResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            });
+
+        }
+
+
+
+        // PERFORMANCE
+
+        function getPerformance() {
+
+            fetch("/logs/performance")
+
+            .then(response =>
+                response.json()
+            )
+
+            .then(data => {
+
+                document.getElementById(
+                    "performanceResult"
+                ).innerText =
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    );
+
+            });
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
